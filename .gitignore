@@ -1,0 +1,17 @@
+# macOS rendszerfájlok
+.DS_Store
+
+# Python gyorsítótár és virtuális környezetek
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.venv/
+.env
+
+# Jupyter Notebook checkpointok (ha használtál notebookot a tanításhoz)
+.ipynb_checkpoints/
+
+# Adatok (hogy a nagy Kaggle CSV fájlok ne menjenek fel a GitHubra)
+*.csv

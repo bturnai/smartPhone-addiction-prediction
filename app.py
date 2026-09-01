@@ -1,11 +1,10 @@
 import gradio as gr
 import joblib
-import numpy as np
 import pandas as pd
 
+model = joblib.load("model_pipeline.joblib")
 
-model = joblib.load("model.joblib")
-def predict_addiction(age, daily_screen, social_media, work_study, notifications, weekend_screen, gaming_hours, gender, stress_level, academic_impact, sleep_hours):
+def predict_addiction(age, daily_screen, social_media, gaming_hours, app_opens, work_study, notifications, weekend_screen, sleep_hours, gender, stress_level, academic_impact):
     
     input_data = pd.DataFrame([{
         "id": 0,
@@ -19,7 +18,8 @@ def predict_addiction(age, daily_screen, social_media, work_study, notifications
         "sleep_hours": sleep_hours, 
         "gender": gender, 
         "stress_level": stress_level, 
-        "academic_work_impact": academic_impact
+        "academic_work_impact": academic_impact,
+        "app_opens_per_day": app_opens
     }])
     
     pred_proba = model.predict_proba(input_data)[0][1]
@@ -28,14 +28,14 @@ def predict_addiction(age, daily_screen, social_media, work_study, notifications
 demo = gr.Interface(
     fn=predict_addiction,
     inputs=[
-        gr.Slider(1, 50, step=1, label="Age"),
-        gr.Slider(0, 20, step=1, label="Daily screen hours"),
-        gr.Slider(0, 20, step=1, label="Social media hours"),
-        gr.Slider(0, 5, step=1, label="Gaming hours"),
-        
+        gr.Number(minimum=18, maximum=40, label="Age"),
+        gr.Number(minimum=0, maximum=18, label="Daily screen hours"),
+        gr.Number(minimum=0, maximum=10, label="Social media hours"),
+        gr.Slider(0, 10, step=1, label="Gaming hours"),
+        gr.Number(minimum=0, maximum=200, label="App opens per day"),
         gr.Slider(0, 10, step=1, label="Work study hours"),
-        gr.Slider(1, 300, step=1, label="Notification per day"),
-        gr.Slider(1, 20, step=1, label="Weekend screen time"),
+        gr.Number(minimum=1, maximum=250, label="Notification per day"),
+        gr.Number(minimum=1, maximum=18, label="Weekend screen time"),
         gr.Slider(1, 10, step=1, label="Sleep hours"),
         gr.Radio(["Male", "Female", "Other"], label="Gender"),
         gr.Radio(["Low", "Medium", "High"], label="Stress level"),

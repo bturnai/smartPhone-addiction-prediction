@@ -1,0 +1,39 @@
+# Ignore virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.ipynb
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+
+
+# MacOS metadata
+.DS_Store
+
+# VSCode or other IDE settings
+.vscode/
+.idea/
+
+# Git files
+.git
+.gitignore
+
+# Test folders or data artifacts (if any)
+*.log
+*.csv
+*.tsv
+*.xlsx
+
+# Docker-specific
+Dockerfile.*
+.dockerignore
