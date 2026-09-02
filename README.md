@@ -56,26 +56,35 @@ The competition scores ROC-AUC. But AUC only measures ranking: divide every pred
 
 ### Model progression
 
-| Model | ROC-AUC | Brier | Worst calibration gap |
+| Model | ROC-AUC | Brier | Largest calibration error |
 |---|:---:|:---:|:---:|
 | Logistic regression | 0.9292 | 0.0977 | 6.4 pp |
 | XGBoost | **0.9588** | **0.0740** | **3.7 pp** |
 
-The baseline's calibration curve drifted off the diagonal between 0.5 and 0.7. That was my first hint that the relationship isn't linear.
+The last column is how far the calibration curve strays from the diagonal at its worst point. For the logistic regression that was in the 0.55 bin: it predicted 0.55, the actual rate was 0.49.
 
-XGBoost beat it on every measure, which I didn't expect. Boosted trees usually give you better ranking at the cost of worse calibration, so I was ready to fix that afterwards. Didn't need to.
+That drift between 0.5 and 0.7 was my first hint that the relationship isn't linear.
+
+XGBoost beat the baseline on every measure, which I didn't expect. Boosted trees usually give you better ranking at the cost of worse calibration, so I was ready to fix that afterwards. Didn't need to.
 
 ### What SHAP showed
 
-The effect of daily screen time turned out to be far from a straight line:
+I expected the effect of daily screen time to taper off at the top. It doesn't:
 
 ```
-0-6 hours    ▁▁▁▁▁▁         flat, barely moves the prediction
-6-10 hours   ▁▂▄▆█          steep rise, crossing zero around 7-8h
-10+ hours    ██████         saturates, another hour adds almost nothing
+0-6 hours     ▁▁▁▁▁▁      almost nothing happens (0.11 SHAP/hour)
+6-9 hours     ▁▂▄▆        steep climb (0.80 SHAP/hour)
+~9 hours      ▆█          a sharp step, where several trees put their split
+9-14 hours    ████        keeps climbing just as fast (0.92 SHAP/hour)
 ```
 
-A plateau, then a climb, then another plateau. Logistic regression can only draw a straight line through that, which is where most of the gap between the two models comes from.
+So it's not a curve, it's a hinge. Below 6 hours the feature barely moves the prediction. Above it, the effect switches on and rises at a steady rate all the way to the top of the range.
+
+The step at 9 hours is the trees showing through: XGBoost picks discrete thresholds, and when several trees land on the same cut point their contributions stack into a visible jump. It's an artefact of how the model works, not a claim that something changes about people at exactly 9 hours.
+
+I originally read this off the plot as a plateau at both ends and wrote it up that way. Then I fit the slopes properly and found the upper section is if anything slightly steeper than the middle one. The point cloud spreads out a lot above 10 hours, which made it look flatter than it is.
+
+Either way, a straight line can't do this, and that's where most of the gap between the two models comes from.
 
 ### Hyperparameter tuning
 
@@ -125,7 +134,7 @@ No training needed. The container loads the saved pipeline and starts serving in
 
 ```
 .
-├── phoneAddiction.ipynb   # the full analysis: EDA, modelling, tuning, SHAP
+├── xgboost_phoneAddiction.ipynb   # the full analysis: EDA, modelling, tuning, SHAP
 ├── app.py                          # Gradio interface and prediction logic
 ├── model_pipeline.joblib           # trained preprocessing + XGBoost pipeline
 ├── Dockerfile
