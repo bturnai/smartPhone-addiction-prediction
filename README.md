@@ -78,7 +78,7 @@ I expected the effect of daily screen time to taper off at the top. It doesn't:
 9-14 hours    ▁▂▄▆        keeps climbing just as fast (0.92 SHAP/hour)
 ```
 
-So it's not a curve, it's a hinge. Below 6 hours the feature barely moves the prediction. Above it, the effect switches on and rises at a steady rate all the way to the top of the range.
+So it's not a curve, but rather a hinge. Below 6 hours the feature barely moves the prediction. Above it, the effect switches on and rises at a steady rate all the way to the top of the range.
 
 The step at 9 hours is the trees showing through: XGBoost picks discrete thresholds, and when several trees land on the same cut point their contributions stack into a visible jump. It's an artefact of how the model works, not a claim that something changes about people at exactly 9 hours.
 
