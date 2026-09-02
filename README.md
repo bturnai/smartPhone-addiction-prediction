@@ -50,7 +50,7 @@ Dropping the incomplete rows looked like the better option locally. But that mod
 
 ## How I approached it
 
-### The output is a probability, not a label
+### The output is a probability
 
 The competition scores ROC-AUC. But AUC only measures ranking: divide every prediction by two and the score doesn't budge, even though the numbers are now nonsense. Since the deliverable here is a percentage about a person, I tracked log loss, Brier score and calibration curves as well.
 
@@ -125,7 +125,7 @@ No training needed. The container loads the saved pipeline and starts serving in
 
 ```
 .
-├── xgboost_phoneAddiction.ipynb   # the full analysis: EDA, modelling, tuning, SHAP
+├── phoneAddiction.ipynb   # the full analysis: EDA, modelling, tuning, SHAP
 ├── app.py                          # Gradio interface and prediction logic
 ├── model_pipeline.joblib           # trained preprocessing + XGBoost pipeline
 ├── Dockerfile
