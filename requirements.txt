@@ -2,4 +2,4 @@ gradio==6.26.0
 joblib==1.5.3
 numpy==2.5.2
 scikit-learn==1.8.0
-xgboost
+xgboost==2.1.3
