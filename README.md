@@ -75,7 +75,7 @@ I expected the effect of daily screen time to taper off at the top. It doesn't:
 0-6 hours     ▁▁▁▁▁▁      almost nothing happens (0.11 SHAP/hour)
 6-9 hours     ▁▂▄▆        steep climb (0.80 SHAP/hour)
 ~9 hours      ▆█          a sharp step, where several trees put their split
-9-14 hours    ████        keeps climbing just as fast (0.92 SHAP/hour)
+9-14 hours    ▁▂▄▆        keeps climbing just as fast (0.92 SHAP/hour)
 ```
 
 So it's not a curve, it's a hinge. Below 6 hours the feature barely moves the prediction. Above it, the effect switches on and rises at a steady rate all the way to the top of the range.
